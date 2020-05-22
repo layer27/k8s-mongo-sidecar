@@ -82,13 +82,13 @@ const isConfigRS = () => {
 };
 
 /**
- *  @returns boolean to define if RS should use short DNS names. Default is false
+ *  @returns boolean to define if RS should use POD names to reflect exposed services. Default is false
  */
-const useShortDNSNames = () => {
-  const shortDNSNames = (process.env.MONGO_USE_SHORT_DNS_NAMES || '').trim().toLowerCase();
-  const shortDNSNamesBool = /^(?:y|yes|true|1)$/i.test(shortDNSNames);
-  if (shortDNSNamesBool) {
-    console.info('ReplicaSet should use short DNS names');
+const useExposedServices = () => {
+  const exposedServices = (process.env.KUBERNETES_EXPOSED_SERVICES || '').trim().toLowerCase();
+  const exposedServicesBool = /^(?:y|yes|true|1)$/i.test(exposedServices);
+  if (exposedServicesBool) {
+    console.info('ReplicaSet should use short POD names to reflect exposed services for each POD');
   }
 
   return shortDNSNamesBool;
@@ -124,5 +124,5 @@ module.exports = {
   unhealthySeconds: process.env.SIDECAR_UNHEALTHY_SECONDS || 15,
   env: process.env.NODE_ENV || 'local',
   isConfigRS: isConfigRS(),
-  useShortDNSNames: useShortDNSNames(),
+  useExposedServices: useExposedServices(),
 };

@@ -7,10 +7,10 @@ This project is as a PoC to setup a MongoDB replica set using Kubernetes. It sho
 ## How to use it
 
 The docker image is hosted on Docker Hub and can be found here:
-[https://hub.docker.com/r/morphy/k8s-mongo-sidecar](https://hub.docker.com/r/morphy/k8s-mongo-sidecar)
+[https://hub.docker.com/r/layer27/k8s-mongo-sidecar](https://hub.docker.com/r/layer27/k8s-mongo-sidecar)
 
 An example Kubernetes replication controller can be found in the examples directory on GitHub:
-[https://github.com/morphy2k/k8s-mongo-sidecar](https://github.com/morphy2k/k8s-mongo-sidecar/tree/master/example)
+[https://github.com/layer27/k8s-mongo-sidecar](https://github.com/layer27/k8s-mongo-sidecar/tree/master/example)
 
 
 ### Settings
@@ -19,6 +19,7 @@ An example Kubernetes replication controller can be found in the examples direct
 | --- | --- | --- | --- |
 | KUBERNETES_CLUSTER_DOMAIN | NO | cluster.local | This allows the specification of a custom cluster domain name. Used for the creation of a stable network ID of the k8s Mongo   pods. An example could be: "kube.local". |
 | KUBERNETES_SERVICE_NAME | YES | mongo | This should point to the MongoDB Kubernetes (headless) service that identifies all the pods. |
+| KUBERNETES_EXPOSED_SERVICES | NO | false | Allows ReplicaSet to be referenced by Pod names. These should correspond to matching services created to align to each pod for exposed MongoDB services outside of the cluster as well as inside.
 | KUBERNETES_NAMESPACE | NO |  | The namespace to look up pods in. Not setting it will search for pods in all namespaces. |
 | KUBERNETES_POD_LABELS | YES |  | This should be a be a comma separated list of key values the same as the podTemplate labels. See above for example. |
 | MONGO_PORT | NO | 27017 | Configures the mongo port, allows the usage of non-standard ports. |
@@ -35,7 +36,6 @@ An example Kubernetes replication controller can be found in the examples direct
 | MONGO_TLS_PASS | NO | | TLS Certificate pass phrase |
 | MONGO_TLS_CRL | NO | | Path to TLS Certificate revocation list |
 | MONGO_TLS_IDENTITY_CHECK | NO | true | Server identity check during TLS. Checks server's hostname against the certificate |
-| MONGO_USE_SHORT_DNS_NAMES | NO | false | Drops the namespace and cluster domain from stable network id |
 | SIDECAR_SLEEP_SECONDS | NO | 5 | This is how long to sleep between work cycles. |
 | SIDECAR_UNHEALTHY_SECONDS | NO | 15 | This is how many seconds a replica set member has to get healthy before automatically being removed from the replica set. |
 
@@ -64,7 +64,7 @@ Environment variables, Volume & Volume Mounts
             - name: mongo-tls
               mountPath: /data/tls/mongo
         - name: mongo-sidecar
-          image: morphy/k8s-mongo-sidecar
+          image: layer27/k8s-mongo-sidecar:latest
           env:
             - name: KUBERNETES_POD_LABELS
               value: "role=mongo,environment=prod"
