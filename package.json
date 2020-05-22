@@ -1,7 +1,7 @@
 {
   "name": "@layer27/k8s-mongo-sidecar",
   "description": "Kubernetes sidecar for mongoDB",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "license": "MIT",
   "author": {
     "name": "Layer27 DevOps",
@@ -40,7 +40,7 @@
   },
   "dependencies": {
     "ip": "^1.1.5",
-    "node-kubernetes-client": "^0.2.2",
+    "kubernetes-client": "^8.3.7",
     "luxon": "^1.23.0",
     "mongodb": "^3.5.6"
   }

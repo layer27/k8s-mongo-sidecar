@@ -20,6 +20,7 @@ const getK8sClusterDomain = () => {
  * Calls a reverse DNS lookup to ensure that the given custom domain name matches the actual one.
  * Raises a console warning if that is not the case.
  * @param clusterDomain the domain to verify.
+ * @param namespace the namespace to check
  */
 const verifyCorrectnessOfDomain = async (clusterDomain, namespace) => {
   if (!clusterDomain) return;
@@ -33,7 +34,7 @@ const verifyCorrectnessOfDomain = async (clusterDomain, namespace) => {
 
   try {
     const resolver = new dns.Resolver();
-    resolver.setServers([servers[0]]);
+    // resolver.setServers([servers[0]]);
 
     const lookup = promisify(resolver.resolve);
 
