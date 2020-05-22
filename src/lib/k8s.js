@@ -1,33 +1,58 @@
 'use strict';
 
-const { Client, KubeConfig } = require('kubernetes-client');
-const Request = require('kubernetes-client/backends/request');
+var Client = require('node-kubernetes-client');
+var config = require('./config');
+var util = require("util");
 
-const config = require('./config');
+fs = require('fs');
 
-const kubeconfig = new KubeConfig();
-kubeconfig.loadFromCluster();
+var readToken = fs.readFileSync('/var/run/secrets/kubernetes.io/serviceaccount/token');
 
-const client = new Client({
-  backend: new Request({ kubeconfig }),
-  version: '1.13'
+var client = new Client({
+  host: config.k8sROServiceAddress,
+  namespace: config.namespace,
+  protocol: 'https',
+  version: 'v1',
+  token: readToken
 });
 
-const init = async() => {
-  return await client.loadSpec();
+
+const getMongoPods = () => {
+  return new Promise ((resolve, reject) => {
+    client.pods.get(function (err, podResult) {
+      if (err) {
+        reject(err);
+      }
+      var pods = [];
+      for (var j in podResult) {
+        pods = pods.concat(podResult[j].items)
+      }
+      var labels = config.mongoPodLabelCollection;
+      var results = [];
+      for (var i in pods) {
+        var pod = pods[i];
+        if (podContainsLabels(pod, labels)) {
+          results.push(pod);
+        }
+      }
+      resolve(results);
+    });
+  });
 };
 
-const getMongoPods = async() => {
-  try {
-    const res = await client.api.v1.namespaces(config.k8sNamespace)
-      .pods.get({ qs: { labelSelector: config.k8sMongoPodLabels } });
-    return res.body.items;
-  } catch (err) {
-    return Promise.reject(err);
+var podContainsLabels = function podContainsLabels(pod, labels) {
+  if (!pod.metadata || !pod.metadata.labels) return false;
+
+  for (var i in labels) {
+    var kvp = labels[i];
+    if (!pod.metadata.labels[kvp.key] || pod.metadata.labels[kvp.key] != kvp.value) {
+      return false;
+    }
   }
+
+  return true;
 };
 
 module.exports = {
-  init,
-  getMongoPods
+  getMongoPods: getMongoPods
 };

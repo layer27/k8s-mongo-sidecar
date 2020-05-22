@@ -30,11 +30,11 @@ const init = async() => {
     return Promise.reject(err);
   }
 
-  try {
-    await k8s.init();
-  } catch (err) {
-    return Promise.reject(err);
-  }
+  //try {
+    //await k8s.init();
+  //} catch (err) {
+    //return Promise.reject(err);
+  //}
 
   return;
 };
