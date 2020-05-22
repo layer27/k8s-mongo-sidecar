@@ -23,19 +23,23 @@ const getMongoPods = () => {
       if (err) {
         reject(err);
       }
-      var pods = [];
-      for (var j in podResult) {
-        pods = pods.concat(podResult[j].items)
-      }
-      var labels = config.mongoPodLabelCollection;
-      var results = [];
-      for (var i in pods) {
-        var pod = pods[i];
-        if (podContainsLabels(pod, labels)) {
-          results.push(pod);
+      try {
+        var pods = [];
+        for (var j in podResult) {
+          pods = pods.concat(podResult[j].items)
         }
+        var labels = config.mongoPodLabelCollection;
+        var results = [];
+        for (var i in pods) {
+          var pod = pods[i];
+          if (podContainsLabels(pod, labels)) {
+            results.push(pod);
+          }
+        }
+        resolve(results);
+      } catch (e) {
+        reject (e);
       }
-      resolve(results);
     });
   });
 };

@@ -11,7 +11,8 @@ const getK8sROServiceAddress = () => `${process.env.KUBERNETES_SERVICE_HOST}:${p
  */
 const getK8sClusterDomain = () => {
   const domain = process.env.KUBERNETES_CLUSTER_DOMAIN || 'cluster.local';
-  verifyCorrectnessOfDomain(domain);
+  const namespace = process.env.KUBERNETES_NAMESPACE || 'default';
+  verifyCorrectnessOfDomain(domain, namespace);
   return domain;
 };
 
@@ -20,9 +21,10 @@ const getK8sClusterDomain = () => {
  * Raises a console warning if that is not the case.
  * @param clusterDomain the domain to verify.
  */
-const verifyCorrectnessOfDomain = async clusterDomain => {
+const verifyCorrectnessOfDomain = async (clusterDomain, namespace) => {
   if (!clusterDomain) return;
 
+  
   const servers = dns.getServers();
   if (!servers || !servers.length) {
     console.warn('dns.getServers() didn\'t return any results when verifying the cluster domain \'%s\'.', clusterDomain);
@@ -30,11 +32,15 @@ const verifyCorrectnessOfDomain = async clusterDomain => {
   }
 
   try {
-    const reverse = promisify(dns.reverse);
+    const resolver = new dns.Resolver();
+    resolver.setServers([servers[0]]);
 
-    // In the case that we can resolve the DNS servers, we get the first and try to retrieve its host.
-    const host = await reverse(servers[0]);
-    if (host.length < 1 || !host[0].endsWith(clusterDomain)) {
+    const lookup = promisify(resolver.resolve);
+
+    // Directly lookup and check the name
+
+    const host = await lookup(`kubernetes.${namespace}.svc.${clusterDomain}`);
+    if (host.length < 1 ) {
       console.warn('Possibly wrong cluster domain name! Detected \'%s\' but expected similar to \'%s\'',  clusterDomain, host);
     }
     else {
