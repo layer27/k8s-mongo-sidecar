@@ -236,6 +236,7 @@ const addrToAddLoop = (pods, members) => {
     if (!podInRs) {
       // If the node was not present, we prefer the stable network ID, if present.
       const addrToUse = podStableNetworkAddr || podIpAddr;
+      console.info(`Address to use is: ${addrToUse}`);
       addrToAdd.push(addrToUse);
     }
   }
