@@ -91,7 +91,7 @@ const useExposedServices = () => {
     console.info('ReplicaSet should use short POD names to reflect exposed services for each POD');
   }
 
-  return shortDNSNamesBool;
+  return exposedServicesBool;
 };
 
 /**
