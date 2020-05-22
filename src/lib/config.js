@@ -75,6 +75,19 @@ const isConfigRS = () => {
 };
 
 /**
+ *  @returns boolean to define if RS should use short DNS names. Default is false
+ */
+const useShortDNSNames = () => {
+  const shortDNSNames = (process.env.MONGO_USE_SHORT_DNS_NAMES || '').trim().toLowerCase();
+  const shortDNSNamesBool = /^(?:y|yes|true|1)$/i.test(shortDNSNames);
+  if (shortDNSNamesBool) {
+    console.info('ReplicaSet should use short DNS names');
+  }
+
+  return shortDNSNamesBool;
+};
+
+/**
  * @returns boolean
  */
 const stringToBool = boolStr => ( boolStr === 'true' ) || false;
@@ -104,4 +117,5 @@ module.exports = {
   unhealthySeconds: process.env.SIDECAR_UNHEALTHY_SECONDS || 15,
   env: process.env.NODE_ENV || 'local',
   isConfigRS: isConfigRS(),
+  useShortDNSNames: useShortDNSNames(),
 };

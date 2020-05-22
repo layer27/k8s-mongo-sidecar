@@ -1,6 +1,3 @@
-![Lint](https://github.com/morphy2k/k8s-mongo-sidecar/workflows/Lint/badge.svg)
-[![Dependabot status](https://api.dependabot.com/badges/status?host=github&repo=morphy2k/k8s-mongo-sidecar)](https://dependabot.com/)
-
 # Mongo Kubernetes Replica Set Sidecar
 
 This project is as a PoC to setup a MongoDB replica set using Kubernetes. It should handle resizing of any type and be resilient to the various conditions both MongoDB and Kubernetes can find themselves in.
@@ -38,6 +35,7 @@ An example Kubernetes replication controller can be found in the examples direct
 | MONGO_TLS_PASS | NO | | TLS Certificate pass phrase |
 | MONGO_TLS_CRL | NO | | Path to TLS Certificate revocation list |
 | MONGO_TLS_IDENTITY_CHECK | NO | true | Server identity check during TLS. Checks server's hostname against the certificate |
+| MONGO_USE_SHORT_DNS_NAMES | NO | false | Drops the namespace and cluster domain from stable network id |
 | SIDECAR_SLEEP_SECONDS | NO | 5 | This is how long to sleep between work cycles. |
 | SIDECAR_UNHEALTHY_SECONDS | NO | 15 | This is how many seconds a replica set member has to get healthy before automatically being removed from the replica set. |
 

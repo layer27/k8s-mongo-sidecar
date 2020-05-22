@@ -1,20 +1,19 @@
 {
-  "name": "k8s-mongo-sidecar",
+  "name": "@layer27/k8s-mongo-sidecar",
   "description": "Kubernetes sidecar for mongoDB",
-  "version": "0.4.2",
+  "version": "0.1.0",
   "license": "MIT",
   "author": {
-    "name": "Markus Wiegand",
-    "email": "mail@morphy2k.dev",
-    "url": "https://morphy2k.dev"
+    "name": "Layer27 DevOps",
+    "email": "devops@layer27.com",
+    "url": "https://layer27.com"
   },
-  "contributors": "https://github.com/morphy2k/k8s-mongo-sidecar/graphs/contributors",
   "repository": {
     "type": "git",
-    "url": "https://github.com/morphy2k/k8s-mongo-sidecar.git"
+    "url": "https://github.com/layer27/k8s-mongo-sidecar.git"
   },
   "bugs": {
-    "url": "https://github.com/morphy2k/k8s-mongo-sidecar/issues"
+    "url": "https://github.com/layer27/k8s-mongo-sidecar/issues"
   },
   "engines": {
     "node": ">=8.11.0"

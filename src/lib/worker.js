@@ -277,7 +277,11 @@ const getPodIpAddressAndPort = pod => {
 const getPodStableNetworkAddressAndPort = pod => {
   if (!config.k8sMongoServiceName || !pod || !pod.metadata || !pod.metadata.name || !pod.metadata.namespace) return;
 
-  return `${pod.metadata.name}.${config.k8sMongoServiceName}.${pod.metadata.namespace}.svc.${config.k8sClusterDomain}:${config.mongoPort}`;
+  if (config.useShortDNSNames) {
+    return `${pod.metadata.name}.${config.k8sMongoServiceName}:${config.mongoPort}`;
+  } else {
+    return `${pod.metadata.name}.${config.k8sMongoServiceName}.${pod.metadata.namespace}.svc.${config.k8sClusterDomain}:${config.mongoPort}`;
+  }
 };
 
 module.exports = {
