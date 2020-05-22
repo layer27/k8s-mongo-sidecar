@@ -4,7 +4,7 @@ var Client = require('node-kubernetes-client');
 var config = require('./config');
 var util = require("util");
 
-fs = require('fs');
+var fs = require('fs');
 
 var readToken = fs.readFileSync('/var/run/secrets/kubernetes.io/serviceaccount/token');
 
